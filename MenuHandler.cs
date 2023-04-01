@@ -20,6 +20,10 @@ namespace R3DCore.Menu {
         void Awake() {
             instance = this;
             activeMenu = 0;
+
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
+            Networking.roomNumber = 0;
         }
 
 

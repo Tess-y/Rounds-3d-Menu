@@ -18,11 +18,12 @@ namespace R3DCore.Menu {
         private const string ModId = "com.Root.Menu";
         private const string ModName = "Menu";
         public const string Version = "0.0.0"; // What version are we On (major.minor.patch)?
+        public static string Menu;
 
         private void Awake() {
             new Harmony(ModId).PatchAll();
-            SceneManager.LoadScene(
-                Jotunn.Utils.AssetUtils.LoadAssetBundleFromResources("menu", typeof(Main).Assembly).GetAllScenePaths().First(), LoadSceneMode.Single);
+            Menu = Jotunn.Utils.AssetUtils.LoadAssetBundleFromResources("menu", typeof(Main).Assembly).GetAllScenePaths().First();
+            SceneManager.LoadScene(Menu, LoadSceneMode.Single);
         }
 
         // Start is called before the first frame update
