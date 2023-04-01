@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Rounds3DModding {
+namespace R3DCore.Menu {
     public class PlayerNameBox:MonoBehaviour {
         // Start is called before the first frame update
         void Start() {

@@ -8,7 +8,7 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using HarmonyLib;
 
-namespace Rounds3DModding {
+namespace R3DCore.Menu {
     // Declares our Mod to Bepin
     [BepInPlugin(ModId, ModName, Version)]
     // The game our Mod Is associated with
