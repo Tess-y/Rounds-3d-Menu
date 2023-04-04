@@ -33,7 +33,7 @@ namespace R3DCore.Menu {
         void Awake() {
             instance = this;
             activeMenu = 0;
-
+            menuTree = new List<int>();
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
             Networking.roomNumber = 0;
@@ -103,7 +103,6 @@ namespace R3DCore.Menu {
             var button = Instantiate(TemplateButton, parent);
             button.SetActive(true);
             button.transform.localPosition = new Vector3(950-8.5f, parent.childCount * -160);
-            Debug.Log(button.transform.localPosition);
             button.GetComponent<Button>().onClick.AddListener(() => ActiveMenu = ID);
             button.GetComponentInChildren<TextMeshProUGUI>().text = name;
         }
