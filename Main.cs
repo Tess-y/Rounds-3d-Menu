@@ -19,22 +19,19 @@ namespace R3DCore.Menu {
         private const string ModName = "Menu";
         public const string Version = "0.0.0"; // What version are we On (major.minor.patch)?
         public static string Menu;
+        internal AssetBundle assetBundle;
 
-        private void Awake() {
+        void Awake() {
             new Harmony(ModId).PatchAll();
-            Menu = Jotunn.Utils.AssetUtils.LoadAssetBundleFromResources("menu", typeof(Main).Assembly).GetAllScenePaths().First();
+            assetBundle = Jotunn.Utils.AssetUtils.LoadAssetBundleFromResources("menu", typeof(Main).Assembly);
+            Menu = Jotunn.Utils.AssetUtils.LoadAssetBundleFromResources("menuscene", typeof(Main).Assembly).GetAllScenePaths().First();
             SceneManager.LoadScene(Menu, LoadSceneMode.Single);
         }
-
-        // Start is called before the first frame update
         void Start() {
-
+            var Host = assetBundle.LoadAsset<GameObject>("Host");
+            var Join = assetBundle.LoadAsset<GameObject>("Join");
+            MenuHandler.ResgesterMenu(Host.GetComponent<Canvas>(), MenuHandler.MenuType.Play);
+            MenuHandler.ResgesterMenu(Join.GetComponent<Canvas>(), MenuHandler.MenuType.Play);
         }
-
-        // Update is called once per frame
-        void Update() {
-
-        }
-
     }
 }
