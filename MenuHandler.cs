@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace R3DCore.Menu {
 
         private static int activeMenu = 0;
 
-        internal static List<(Canvas,MenuType)> menus = new List<(Canvas,MenuType)> ();
+        internal static List<(Canvas,MenuType,Canvas)> menus = new List<(Canvas,MenuType,Canvas)> ();
 
         private static List<int> menuTree = new List<int>(); 
 
@@ -44,7 +45,7 @@ namespace R3DCore.Menu {
                 for(int _=0;_<5;_++)
                     yield return null;
                 foreach (var menu in menus) {
-                    AddMenu(menu.Item1, menu.Item2);
+                    AddMenu(menu.Item1, menu.Item2, menu.Item3);
                 }
             }
         }
@@ -66,11 +67,16 @@ namespace R3DCore.Menu {
             }
         }
 
-        public static void ResgesterMenu(Canvas canvas, MenuType type) {
-            menus.Add((canvas, type));
+        public static void ResgesterMenu(Canvas canvas, MenuType type, Canvas parent = null) {
+            if(type == MenuType.Sub && parent == null)
+                throw new ArgumentException("SubMenus require a parent");
+            if(type == MenuType.Sub && !menus.Any(item => item.Item1.Equals(parent)))
+                throw new ArgumentException("SubMenus can't be regestered before parent");
+
+            menus.Add((canvas, type, parent));
         }
 
-        private int AddMenu(Canvas canvas, MenuType type) {
+        private int AddMenu(Canvas canvas, MenuType type, Canvas parent) {
             canvas = Instantiate(canvas);
             canvas.name = canvas.name.Replace("(Clone)", "");
             switch(type) {
@@ -83,10 +89,13 @@ namespace R3DCore.Menu {
                 case MenuType.Option:
                     SetUpButton(transform.GetChild(3).Find("Scroll View/Viewport/Content/"), transform.childCount, canvas.name);
                     break;
+                case MenuType.Sub:
+                    SetUpButton(transform.GetChild(menus.IndexOf(menus.First(item => item.Item1.Equals(parent)))).Find("Scroll View/Viewport/Content/"), transform.childCount, canvas.name);
+                    break;
             }
             canvas.transform.SetParent(transform, false);
             canvas.gameObject.SetActive(false);
-            Instantiate(MenuHandler.instance.Template.transform.GetChild(0).gameObject, canvas.transform);
+            Instantiate(Template.transform.GetChild(0).gameObject, canvas.transform);
             return transform.childCount-1;
         }
 
@@ -102,7 +111,8 @@ namespace R3DCore.Menu {
         public enum MenuType {
             Play,
             Mod,
-            Option
+            Option,
+            Sub
         }
 
     }
